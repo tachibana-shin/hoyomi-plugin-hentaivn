@@ -202,12 +202,34 @@ class HentaiVN extends ABComicService {
       filters: filters || {}
     })
   }
+
+  readonly _suggestStore = new Map<string, Comic[]>()
+
   async getDetails(comicId: string): Promise<MetaComic> {
     const $ = load(
       await fetch(`/truyen-hentai/${comicId}`).then(async (res) =>
         res.ok ? res.text() : Promise.reject(await res.text())
       )
     )
+
+    const suggest = $(".related-manga .related-reading-wrap")
+      .toArray()
+      .map((manga) => {
+        const $manga = $(manga)
+
+        return defineType<Comic>({
+          name: $manga.find("h5").text().trim(),
+          originalName: $manga.find("h5 > a").attr("title"),
+          comicId: $manga
+            .find("a")
+            .attr("href")
+            ?.split("/")
+            .filter(Boolean)
+            .at(-1)!,
+          image: createOImage($manga.find("img").data("src") as string)
+        })
+      })
+    this._suggestStore.set($(".post-title").text().trim(), suggest)
 
     return defineType<MetaComic>({
       name: $(".post-title").text().trim(),
@@ -279,6 +301,10 @@ class HentaiVN extends ABComicService {
         $('[property="article:modified_time"]').attr("content")!
       )
     })
+  }
+
+  async getSuggest(comic: MetaComic, page?: number): Promise<Comic[]> {
+    return this._suggestStore.get(comic.name)!
   }
   async getPages(manga: string, chap: string): Promise<OImage[]> {
     const $ = load(
