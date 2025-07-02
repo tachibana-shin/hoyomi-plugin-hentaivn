@@ -1,0 +1,40 @@
+name: Build and Push to Release Branch
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build project
+        run: bun run build
+
+      - name: Prepare release branch
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          git checkout -B release
+
+          find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name 'dist' ! -name 'package.json' -exec rm -rf {} +
+
+          cp dist/index.js ./index.js
+
+          git add index.js package.json
+          git commit -m "Release from ${{ github.ref_name }}" || echo "No changes to commit"
+          git push origin release --force
