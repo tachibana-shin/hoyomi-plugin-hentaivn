@@ -112,7 +112,8 @@ class HentaiVN extends ABComicService {
       categories: [
         {
           name: "Mới nhất",
-          items: this.parseMangas($)
+          items: this.parseMangas($),
+          gridView: true
         }
       ]
     })
@@ -226,7 +227,7 @@ class HentaiVN extends ABComicService {
           .toLowerCase() === "OnGoing"
           ? StatusEnum.Ongoing
           : StatusEnum.Completed,
-      genres: $(".genres-content")
+      genres: $(".genres-content a")
         .toArray()
         .map((item) => {
           const $item = $(item)
