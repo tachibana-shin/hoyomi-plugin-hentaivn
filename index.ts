@@ -14,7 +14,8 @@ import {
   type OImage,
   type ServiceInit,
   StatusEnum,
-  type Genre
+  type Genre,
+  type RateValue
 } from "@hoyomi/bridge_ts"
 import { version, description } from "./package.json"
 import { load, type CheerioAPI } from "cheerio"
@@ -129,7 +130,7 @@ class HentaiVN extends ABComicService {
           /_/g,
           "/"
         )}` +
-          (params.page > 1 ? `/page/${params.page}/` : "") +
+          (params.page > 1 ? `/page/${params.page}/` : "/") +
           (params.filters.m_orderby
             ? `?m_orderby=${params.filters.m_orderby}`
             : "")
@@ -227,6 +228,12 @@ class HentaiVN extends ABComicService {
           .toLowerCase() === "OnGoing"
           ? StatusEnum.Ongoing
           : StatusEnum.Completed,
+      rate: defineType<RateValue>({
+        value:
+          Number.parseFloat($(".post-total-rating .score").text().trim()) || 0,
+        best: 5,
+        count: 0
+      }),
       genres: $(".genres-content a")
         .toArray()
         .map((item) => {
@@ -234,7 +241,11 @@ class HentaiVN extends ABComicService {
 
           return defineType<Genre>({
             name: $item.text().trim(),
-            genreId: $item.attr("href")?.split("/").filter(Boolean).at(-1)!
+            genreId: `the-loai_${$item
+              .attr("href")
+              ?.split("/")
+              .filter(Boolean)
+              .at(-1)!}`
           })
         }),
       author: $(".author-content").text().trim() || undefined,
@@ -243,9 +254,10 @@ class HentaiVN extends ABComicService {
           .text()
           .match(/([\d.]+\w) views/)?.[1] ?? ""
       ),
-      description: $(".description-summary p").text(),
+      description: $(".description-summary .summary__content").html() ?? "",
       chapters: $(".wp-manga-chapter a")
         .toArray()
+        .reverse()
         .map((item) => {
           const $item = $(item)
 
@@ -278,7 +290,7 @@ class HentaiVN extends ABComicService {
     return defineType<OImage[]>(
       $("img.wp-manga-chapter-img")
         .toArray()
-        .map((item) => createOImage($(item).attr("src") as string))
+        .map((item) => createOImage($(item).attr("src")?.trim() as string))
     )
   }
   search(params: {
