@@ -4,7 +4,7 @@
     "": {
       "name": "animehay",
       "dependencies": {
-        "@hoyomi/bridge_ts": "^0.0.6",
+        "@hoyomi/bridge_ts": "^0.0.10",
         "cheerio": "^1.1.0",
       },
       "devDependencies": {
@@ -36,7 +36,7 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.0.6", "", { "os": "win32", "cpu": "x64" }, "sha512-bfM1Bce0d69Ao7pjTjUS+AWSZ02+5UHdiAP85Th8e9yV5xzw6JrHXbL5YWlcEKQ84FIZMdDc7ncuti1wd2sdbw=="],
 
-    "@hoyomi/bridge_ts": ["@hoyomi/bridge_ts@0.0.6", "", { "dependencies": { "bumpp": "^10.2.0" }, "peerDependencies": { "typescript": "^5" } }, "sha512-5T1tzqzq8bGvxjjkekYMoQJxBtb+mg2J6ByjrI08zepcGMJ2d7h4XsaCxA1unnKd6VQ4i5KDrU9QKmCVzPd6CA=="],
+    "@hoyomi/bridge_ts": ["@hoyomi/bridge_ts@0.0.10", "", { "dependencies": { "bumpp": "^10.2.0" }, "peerDependencies": { "typescript": "^5" } }, "sha512-pB/puCyYzzpkDxNeL1LURA77nCqpuPhjr5qQTZqdN6qzCvnF6ou62RRTrN5pjZ5Sy6aTu/Oo5FXaDf15WQlnFA=="],
 
     "@types/bun": ["@types/bun@1.2.17", "", { "dependencies": { "bun-types": "1.2.17" } }, "sha512-l/BYs/JYt+cXA/0+wUhulYJB6a6p//GTPiJ7nV+QHa8iiId4HZmnu/3J/SowP5g0rTiERY2kfGKXEK5Ehltx4Q=="],
 

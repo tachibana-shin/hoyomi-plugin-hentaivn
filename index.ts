@@ -229,7 +229,6 @@ class HentaiVN extends ABComicService {
           image: createOImage($manga.find("img").data("src") as string)
         })
       })
-    this._suggestStore.set($(".post-title").text().trim(), suggest)
 
     return defineType<MetaComic>({
       name: $(".post-title").text().trim(),
@@ -299,12 +298,16 @@ class HentaiVN extends ABComicService {
         }),
       lastModified: new Date(
         $('[property="article:modified_time"]').attr("content")!
-      )
+      ),
+      extra: JSON.stringify(suggest)
     })
   }
-
-  async getSuggest(comic: MetaComic, page?: number): Promise<Comic[]> {
-    return this._suggestStore.get(comic.name)!
+  async getSuggest(params: {
+    metaComic: MetaComic
+    comicId: string
+    page?: number
+  }): Promise<Comic[]> {
+    return JSON.parse(params.metaComic.extra ?? "")
   }
   async getPages(manga: string, chap: string): Promise<OImage[]> {
     const $ = load(
