@@ -21,7 +21,7 @@ import {
 import { version, description } from "./package.json"
 import { load, type CheerioAPI } from "cheerio"
 
-class HentaiVN extends ABComicService {
+export class HentaiVN extends ABComicService {
   override writeWith: string = "typescript"
   override init: ServiceInit = {
     name: "HentaiVN",
@@ -129,10 +129,10 @@ class HentaiVN extends ABComicService {
   }): Promise<ComicCategory> {
     const $ = load(
       await fetch(
-        `/${(params.categoryId === "latest" ? "" : params.categoryId).replace(
-          /_/g,
-          "/"
-        )}` +
+        `${(params.categoryId === "latest"
+          ? ""
+          : `/${params.categoryId}`
+        ).replace(/_/g, "/")}` +
           (params.page > 1 ? `/page/${params.page}/` : "/") +
           (params.filters.m_orderby
             ? `?m_orderby=${params.filters.m_orderby}`
@@ -179,20 +179,22 @@ class HentaiVN extends ABComicService {
           ]
         : undefined
 
-    return defineType<ComicCategory>({
-      name: $(".item-title.h4").text().trim(),
-      url: "",
-      items: this.parseMangas($),
-      page: params.page,
-      totalItems: Number.parseInt($(".h4:contains('kết quả')").text().trim()),
-      totalPages: Number.parseInt(
+        const totalPages=  Number.parseInt(
         // biome-ignore lint/style/noNonNullAssertion: <false>
         $(".wp-pagenavi > a.last")
           .attr("href")
           ?.split("/")
           .filter(Boolean)
           .at(-1)!
-      ),
+      ) || 1
+
+    return defineType<ComicCategory>({
+      name: $(".item-title.h4").text().trim(),
+      url: "",
+      items: this.parseMangas($),
+      page: params.page,
+      totalItems: Number.parseInt($("h1.h4").text().trim()) || totalPages * 24,
+      totalPages,
       filters
     })
   }
