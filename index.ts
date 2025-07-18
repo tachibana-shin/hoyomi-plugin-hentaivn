@@ -1,3 +1,4 @@
+// biome-ignore assist/source/organizeImports: <false>
 import {
   ABComicService,
   type Comic,
@@ -19,7 +20,6 @@ import {
 } from "@hoyomi/bridge_ts"
 import { version, description } from "./package.json"
 import { load, type CheerioAPI } from "cheerio"
-import { $ } from "bun"
 
 class HentaiVN extends ABComicService {
   override writeWith: string = "typescript"
@@ -49,6 +49,7 @@ class HentaiVN extends ABComicService {
 
         return defineType<Comic>({
           name: $item.find("h3").text().trim(),
+          // biome-ignore lint/style/noNonNullAssertion: <false>
           comicId: $item
             .find("a")
             .attr("href")
@@ -68,6 +69,7 @@ class HentaiVN extends ABComicService {
                   .find("a")
                   .text()
                   .trim(),
+                // biome-ignore lint/style/noNonNullAssertion: <false>
                 chapterId: $item
                   .find(".chapter-item")
                   .first()
@@ -98,6 +100,7 @@ class HentaiVN extends ABComicService {
 
             return defineType<ComicCarouselItem>({
               image: createOImage($item.find("img").data("src") as string),
+              // biome-ignore lint/style/noNonNullAssertion: <false>
               comicId: $item
                 .find("a")
                 .attr("href")
@@ -183,6 +186,7 @@ class HentaiVN extends ABComicService {
       page: params.page,
       totalItems: Number.parseInt($(".h4:contains('kết quả')").text().trim()),
       totalPages: Number.parseInt(
+        // biome-ignore lint/style/noNonNullAssertion: <false>
         $(".wp-pagenavi > a.last")
           .attr("href")
           ?.split("/")
@@ -220,6 +224,7 @@ class HentaiVN extends ABComicService {
         return defineType<Comic>({
           name: $manga.find("h5").text().trim(),
           originalName: $manga.find("h5 > a").attr("title"),
+          // biome-ignore lint/style/noNonNullAssertion: <false>
           comicId: $manga
             .find("a")
             .attr("href")
@@ -246,7 +251,7 @@ class HentaiVN extends ABComicService {
           .find(".summary-content")
           .text()
           .trim()
-          .toLowerCase() === "OnGoing"
+          .toLowerCase() === "ongoing"
           ? StatusEnum.Ongoing
           : StatusEnum.Completed,
       rate: defineType<RateValue>({
@@ -262,11 +267,10 @@ class HentaiVN extends ABComicService {
 
           return defineType<Genre>({
             name: $item.text().trim(),
-            genreId: `the-loai_${$item
-              .attr("href")
-              ?.split("/")
-              .filter(Boolean)
-              .at(-1)!}`
+            genreId: `the-loai_${
+              // biome-ignore lint/style/noNonNullAssertion: <false>
+              $item.attr("href")?.split("/").filter(Boolean).at(-1)!
+            }`
           })
         }),
       author: $(".author-content").text().trim() || undefined,
@@ -284,6 +288,7 @@ class HentaiVN extends ABComicService {
 
           return defineType<ComicChapter>({
             name: $item.text().trim(),
+            // biome-ignore lint/style/noNonNullAssertion: <false>
             chapterId: $item.attr("href")?.split("/").filter(Boolean).at(-1)!,
             time: new Date(
               $item
@@ -297,6 +302,7 @@ class HentaiVN extends ABComicService {
           })
         }),
       lastModified: new Date(
+        // biome-ignore lint/style/noNonNullAssertion: <false>
         $('[property="article:modified_time"]').attr("content")!
       ),
       extra: JSON.stringify(suggest)
