@@ -5,7 +5,7 @@
       "name": "animehay",
       "dependencies": {
         "@hoyomi/bridge_ts": "^0.0.10",
-        "@hoyomi/crawler": "^0.0.2",
+        "@hoyomi/crawler": "^0.0.3",
         "cheerio": "^1.1.0",
       },
       "devDependencies": {
@@ -39,7 +39,7 @@
 
     "@hoyomi/bridge_ts": ["@hoyomi/bridge_ts@0.0.10", "", { "dependencies": { "bumpp": "^10.2.0" }, "peerDependencies": { "typescript": "^5" } }, "sha512-pB/puCyYzzpkDxNeL1LURA77nCqpuPhjr5qQTZqdN6qzCvnF6ou62RRTrN5pjZ5Sy6aTu/Oo5FXaDf15WQlnFA=="],
 
-    "@hoyomi/crawler": ["@hoyomi/crawler@0.0.2", "", { "dependencies": { "cheerio": "^1.1.2", "chrono-node": "^2.8.3", "dayjs": "^1.11.13" }, "peerDependencies": { "typescript": "^5" } }, "sha512-h4HjtA4VEckoxNdOCbDwu1x3DFHYnJ0cLZBdQ5hrfQ/uEcvVILhdo9q31LCeFtpZ6muDFYsDUcR8I8w06NED9w=="],
+    "@hoyomi/crawler": ["@hoyomi/crawler@0.0.3", "", { "dependencies": { "cheerio": "^1.1.2", "chrono-node": "^2.8.3", "dayjs": "^1.11.13" }, "peerDependencies": { "typescript": "^5" } }, "sha512-SCTJN0RsDWC6OhQha5vFxb83vlU0HI0l2OxJdBGqtApehr6cs3FZzU1VQMUJAqB04Czr552nTrgpDhF8QF6rFA=="],
 
     "@types/bun": ["@types/bun@1.2.17", "", { "dependencies": { "bun-types": "1.2.17" } }, "sha512-l/BYs/JYt+cXA/0+wUhulYJB6a6p//GTPiJ7nV+QHa8iiId4HZmnu/3J/SowP5g0rTiERY2kfGKXEK5Ehltx4Q=="],
 

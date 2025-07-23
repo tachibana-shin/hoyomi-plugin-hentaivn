@@ -251,7 +251,7 @@ export class HentaiVN extends ABComicService {
             ),
           });
         }),
-      lastModified: new Date(c.get($('[property="article:modified_time"]'), type("str"), ":content")),
+      lastModified: c.get($('[property="article:modified_time"]'), type("date"), ":content"),
       extra: JSON.stringify(suggest),
     });
   }

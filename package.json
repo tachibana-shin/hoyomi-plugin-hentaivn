@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@hoyomi/bridge_ts": "^0.0.10",
-    "@hoyomi/crawler": "^0.0.2",
+    "@hoyomi/crawler": "^0.0.3",
     "cheerio": "^1.1.0"
   }
 }
