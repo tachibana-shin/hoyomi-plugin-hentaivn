@@ -208,27 +208,14 @@ export class HentaiVN extends ABComicService {
       });
 
     return defineType<MetaComic>({
-      name: $(".post-title").text().trim(),
-      originalName: $(".summary-heading h5:contains('Alternative')")
-        .parent()
-        .parent()
-        .find(".summary-content")
-        .text()
-        .trim(),
-      image: createOImage($(".summary_image img").data("src") as string),
-      status:
-        $(".summary-heading h5:contains('Status')")
-          .parent()
-          .parent()
-          .find(".summary-content")
-          .text()
-          .trim()
-          .toLowerCase() === "ongoing"
+      name: c.get($(".post-title")),
+      originalName: c.get($(".summary-heading h5:contains('Alternative')").parent().parent().find(".summary-content")),
+      image: createOImage(c.get($(".summary_image img"), type("str"), ":data-src")),
+      status: c.get($(".summary-heading h5:contains('Status')").parent().parent().find(".summary-content")).toLowerCase() === "ongoing"
           ? StatusEnum.Ongoing
           : StatusEnum.Completed,
       rate: defineType<RateValue>({
-        value:
-          Number.parseFloat($(".post-total-rating .score").text().trim()) || 0,
+        value: c.get($(".post-total-rating .score"), type("float?")) || 0,
         best: 5,
         count: 0,
       }),
@@ -238,18 +225,15 @@ export class HentaiVN extends ABComicService {
           const $item = $(item);
 
           return defineType<Genre>({
-            name: $item.text().trim(),
-            genreId: `the-loai_${// biome-ignore lint/style/noNonNullAssertion: <false>
-            $item.attr("href")?.split("/").filter(Boolean).at(-1)!}`,
+            name: c.get($item),
+            genreId: `the-loai_${c.get($item, type("slug")(-1), ":href")}`,
           });
         }),
-      author: $(".author-content").text().trim() || undefined,
+      author: c.get($(".author-content")) || undefined,
       views: parseAbbreviatedNumber(
-        $(".summary-content:contains(' views')")
-          .text()
-          .match(/([\d.]+\w) views/)?.[1] ?? "",
+        c.get($(".summary-content:contains(' views')"), type("regexp")(/(\d+\.?\d*\w?) views/, type("str"))) ?? "",
       ),
-      description: $(".description-summary .summary__content").html() ?? "",
+      description: c.get($(".description-summary .summary__content"), type("str"), ":html") ?? "",
       chapters: $(".wp-manga-chapter a")
         .toArray()
         .reverse()
@@ -257,24 +241,17 @@ export class HentaiVN extends ABComicService {
           const $item = $(item);
 
           return defineType<ComicChapter>({
-            name: $item.text().trim(),
-            // biome-ignore lint/style/noNonNullAssertion: <false>
-            chapterId: $item.attr("href")?.split("/").filter(Boolean).at(-1)!,
+            name: c.get($item),
+            chapterId: c.get($item, type("slug")(-1), ":href"),
             time: new Date(
-              $item
-                .find(".chapter-release-date")
-                .text()
-                .trim()
+              c.get($item.find(".chapter-release-date"))
                 .split("/")
                 .reverse()
                 .join("/"),
             ),
           });
         }),
-      lastModified: new Date(
-        // biome-ignore lint/style/noNonNullAssertion: <false>
-        $('[property="article:modified_time"]').attr("content")!,
-      ),
+      lastModified: new Date(c.get($('[property="article:modified_time"]'), type("str"), ":content")),
       extra: JSON.stringify(suggest),
     });
   }
