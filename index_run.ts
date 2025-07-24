@@ -1,8 +1,10 @@
+import { Crawler } from "@hoyomi/crawler"
+import { HentaiVN } from "./index.ts"
 
 /// patch fetch
 if (!process.env.NODE_ENV !== 'production') {
   const { fetch: fetchOrigin } = globalThis
-  globalThis.fetch = ((input: string | URL | Request, init?: RequestInit) => {
+  globalThis.fetch = Crawler.fetch = ((input: string | URL | Request, init?: RequestInit) => {
     const request =
       input instanceof Request
         ? input
@@ -16,3 +18,5 @@ if (!process.env.NODE_ENV !== 'production') {
 }
 
 export * from "./index.ts"
+const a = new HentaiVN()
+console.log(await a.home())
