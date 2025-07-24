@@ -5,7 +5,7 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "build": "bun build index.ts --outfile=dist/index.js --minify",
+    "build": "bun build index.ts --format iife --outfile=dist/index.js --minify --production",
     "release": "bumpp"
   },
   "devDependencies": {
